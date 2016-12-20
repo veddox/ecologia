@@ -1,0 +1,55 @@
+ECOLOGIA TODO
+=============
+
+for version 1.0:
+
+- change humidity label into a selection box	x
+- herbivore feeding behaviour	x
+- carnivore hunting behaviour	x
+- herbivore fleeing behaviour	x
+- "New run" functionality	x
+- graphical configuration windows
+	-> simulation	x
+	-> genomes		x
+	-> program		x
+- find & fix random freeze (Midwinter) bug x
+- find & fix Springfrost (very random freezing) bug	x
+- documentation x
+- help window x
+- adjust genome values to ensure survival of species x
+- improve grazing algorithm x
+- find & fix 'flee center' bug x
+- add analysis IO method x
+- add --autorun option x
+- add --timelapse option x
+- finalize release system and documentation x
+
+for version 1.1:
+
+- systematic recording of runtime data [red] x
+- config file parsing [red] x
+- phylogeny analysis tool [orange] x
+- add --no-gui option [green] x
+- fix release system x
+- update documentation x
+
+for later releases:
+
+- reading in an ascii map file to create the terrain [orange]
+- manipulating animals at runtime [orange]
+- saving the current state of a simulation to file and reloading it [orange]
+- create an ANT build script / make file [yellow]
+- implement caching for log I/O operations [yellow]
+- commandline interface [green]
+- CLI for ecophyl [green]
+- add lock file [green]
+
+	>> colours behind feature requests indicate urgency
+
+ideas for scenario branches:
+
+- walls
+- disease
+- seasons
+- metapopulations
+- Allee effect

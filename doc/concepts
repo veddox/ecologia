@@ -1,0 +1,69 @@
+Ecologia Concepts
+=================
+
+
+UPDATES
+
+Time in Ecologia simulations is measured in updates. Each update, every tile is
+updated and every animal gets its turn to move. How much physical time an update
+requires depends on the speed setting (modifiable in the GUI) and the processing
+power of the computer on which Ecologia is running.
+
+
+TILES
+
+The Ecologia world consists of a tile matrix. Each tile represents one discrete
+area of ground that can be occupied by at most one animal or a spring (water
+tile). Grass grows on tiles, providing food for herbivores. Depending on the 
+humidity, the grass density may increase or decrease each turn. It also 
+decreases when herbivores feed on the tile.
+
+Tiles are colour-coded to show their current grass density: above 20%, the tile
+is green. Between 0% and 20%, it is yellow; when there is no grass at all, the
+tile is white. Herbivores cannot feed on tiles where the grass density is 0%.
+
+
+HUMIDITY
+
+Each tile has a humidity value, which is a combination of global and local
+factors. The global humidity settings may be changed in the GUI, possible values
+are 'Saturation' (+2), 'Wet' (+1), 'Dry' (0), 'Drought' (-1) or 'Severe Drought'
+(-2). This setting simulates rainfall. Local humidity may be affected by the 
+presence of water tiles (representing springs or oases). Each water tile waters
+a 5x5 square around itself (i.e. sets the humidity in those squares to 
+'Saturation').
+
+
+ANIMALS
+
+Animals are the main focus of Ecologia. As of version 1.0, there are two
+species: herbivores and carnivores. Herbivores feed on the grass that grows on
+each tile; carnivores hunt and eat herbivores. All animals have an energy level,
+when this reaches 0, the animal dies. Movement and reproduction requires energy,
+feeding restores it. Reproduction takes place asexually, when the animal's 
+energy level exceeds a certain genetically determined mark. Animals die either
+through losing all energy (for example in a drought) of old age (see the genome)
+or (in the case of herbivores) by being killed in a fight with a carnivore.
+
+
+GENOMES
+
+Each animal has a genome that determines certain core characteristics. At the
+start of a simulation, a user-defined standard genome is given to all animals of
+a species. At reproduction, the parent genome is passed on to the offspring, 
+potentially being mutated in the process.
+
+All genomes encode the following characteristics (values differ according to
+species, but the 'genes' are always the same):
+    - mutation rate (percentage mutation probability per 'gene')
+    - speed of movement (in tiles per turn)
+    - stamina (used to simulate exhaustion caused by moving and fighting)
+    - range of eyesight (in tiles)
+    - efficiency of metabolism (this plays a role in how much energy
+            the animal gleans from its food)
+    - age limit (when reaching this age, the animal dies)
+    - strength (important when hunting/fighting)
+    - reproductive energy (the energy level at which it will reproduce)
+    - age of sexual maturity (at which it can start reproducing)
+    - gestation period (minimum time interval between reproduction events)
+    - rate of reproduction (number of offspring per reproduction event)

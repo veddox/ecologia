@@ -1,0 +1,146 @@
+Ecologia Help
+==============
+
+version 1.1
+
+
+COMPILING ECOLOGIA
+
+By default, Ecologia comes with a precompiled JAR file that you can run straight
+away (see below). However, if you have tinkered with the Java source code, you
+are going to have to recompile it yourself. This is done with the 'release.py'
+script in the project home directory.
+
+release.py automates the release process, including compilation, packaging and
+signing of the finished tar package. When called without arguments, it will run
+the complete program. This can take a bit of time though, so while you are in
+the process of developing, you will probably want to run it with the following
+flags:
+
+	'python3 release.py --no-javadoc --no-sign'
+
+This leaves out two of the most time consuming steps. If for some reason you
+wish to create a ZIP archive for redistribution (instead of the normal tar),
+you can use the --zip flag.
+
+Please note that release.py will only work on Linux.
+
+
+STARTING ECOLOGIA
+
+To start Ecologia, simply double-click on the executable JAR file (Java 7 or
+higher is required). The following command (without the quotes) will launch
+Ecologia from terminal on Linux:
+
+	'java -jar ecologia-1.1.jar'
+
+(Presuming you are using version 1.1, if not, replace with the appropriate
+file name.) When launching from terminal, it is possible to use commandline
+flags to control Ecologia's behaviour. (See below for details.)
+
+
+COMMANDLINE FLAGS
+
+Ecologia accepts several commandline flags, as listed below:
+
+--help    -h	Print this help text
+--version -V	Print the version number
+
+--logging -l	Enable logging to file
+--verbose -v	Give verbose output
+--debug   -d	Print debugging information
+--analyse -a	Print simulation analysis information
+
+--no-graphics	Do not start the GUI (requires --autorun)
+
+--config <file>	Specify a configuration file to use
+--autorun <n>	Autorun the simulation for n updates, then quit
+--timelapse <ms>	Set the timelapse between updates
+
+Note that most of these (except --autorun and --no-graphics) can also be
+accessed from the GUI.
+
+Warning: setting --debug and/or --analyse produces very large log files
+(in the megabyte range) and can potentially reduce performance due to frequent
+disk I/O operations. Use sparingly.
+
+
+THE MAIN WINDOW
+
+The largest part of the main window consists of the map display (a large area
+filled with squares). Each square represents one ground tile, colour coded to
+show the grass density on this field: green > 20%, yellow <= 20%, white 0%.
+Blue squares are water tiles, grey circles herbivores and red circles
+carnivores. Clicking on one tile will bring up an information box about this
+tile and the animal (if any) on it.
+
+On the right is an information and control panel. Its uppermost part displays
+the update and generation counters as well as a counter for the number of 
+currently living herbivores and carnivores. This is followed by the run-time 
+protocol, which displays basic simulation events. (More extensive logging to
+file is possible with the --logging option, see above).
+
+Below this are basic controls: a humidity setter, a Start/Stop button (run/pause
+the simulation), a 'Next' button (advance the simulation by one update), a speed
+slider to control the simulation speed, a 'Pause at update' text box
+(simulation will pause automatically when this update number has been reached)
+and finally a 'Freeze display' checkbox (which stops the display from being
+updated, thus saving some computing resources).
+
+Via the menu you can start a new simulation, configure your setup or view more
+information about Ecologia.
+
+
+CONFIGURATION
+
+The 'Configuration' menu entry gives access to three different configuration
+windows. Under 'Ecologia', you can graphically set the switches that are usually
+controlled via the commandline flags; namely verbosity, logging, analysis and 
+debugging output (see above). 'Simulation' lets you modify global variables 
+related to the simulation run, such as the world size or the number of water 
+tiles. 'Genome' configures the initial genomes which are used when creating 
+the animal populations.
+
+Ecologia also accepts configuration files of a format similar to Microsoft's
+INI files. A config file may be loaded from the GUI (in the menu: Configuration
+-> Configuration file) or specified using a commandline option (see above).
+
+An example config file can be found under 'doc/default.config'. As can be seen
+from this example, the file is split into three sections ('[world]',
+'[herbivore]' and '[carnivore]'), each of which contain several variables.
+The world section is responsible for global parameters while the other two
+sections represent the initial genomes of the two species. Parameter
+declarations consist of the name of the variable, followed by a space and its
+integer value. Lines beginning with a '#' character are ignored by the parser.
+All possible parameters (excepting 'autorun') are listed in the default config
+file. If a parameter is not present in a config file, it is set to its default
+value as specified in the source code.
+
+
+DATA ANALYSIS
+
+When logging is turned on (see above), Ecologia will generate a logfile with
+error messages and, depending on the settings, simulation logs and debugging
+information. Part of the simulation logs are population statistics that are
+saved every update.
+
+Using the 'population.py' script in the 'analysis/demography' folder, it is
+possible to extract these statistics and compile them into a csv or txt file
+or an OpenDocument spreadsheet (if LibreOffice is installed) for further
+analysis. To do so, run the script from terminal. ('population.py --help'
+prints out a list of options.)
+
+The 'population.r' script in the same folder will take a text file outputted
+by the Python script and generate population development graphs from the data.
+
+In the 'analysis/phylogeny' folder you will find 'ecophyl.lisp'. This is a
+Common Lisp library that can create a complete phylogeny from an Ecologia log
+file, if the --analysis flag was set. With it, you can view any individual's
+life stats as well as their ancestors and offspring, or compute the latest
+common ancestor of a group of animals. Unfortunately, there is not yet any
+direct user interface available for this library, so it has to be used via a
+Common Lisp read-eval-print loop (REPL). Ecophyl was developed using the CLISP
+interpreter, but should be usable with any other ANSI-compliant interpreter.
+
+
+Last modified 18/10/2016

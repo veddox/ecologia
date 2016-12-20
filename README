@@ -1,0 +1,43 @@
+===================
+  Ecologia README
+===================
+
+Ecologia is a graphical ecosystem simulator. Currently it is still very basic,
+but hopefully it will soon be expanded to include more and more aspects of a
+real ecosystem.
+
+It is written in Java, though no programming knowledge is needed to use it.
+Requires Java 7 or higher to be installed.
+
+
+Further documentation files can be found in the 'doc' subdirectory:
+
+help - A short manual
+concepts - Introduction to the concepts of Ecologia
+roadmap - Future development plans
+TODO - List of things to be done (for developers)
+bugs - List of known bugs (fixed and current)
+javadoc.html - Complete Javadoc-tm documentation for Ecologia
+Ecologia ODD.pdf - A description of the biological model behind
+		 Ecologia using the ODD protocol (for biologists)
+
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You can find a copy of the license under doc/COPYING, or at
+<http://www.gnu.org/licenses/>
+
+Copyright (C) 2014-2016 Daniel Vedder
+
+
+Last modified 18/10/2016
+
+

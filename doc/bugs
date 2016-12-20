@@ -1,0 +1,95 @@
+ECOLOGIA - known bugs
+=====================
+
+1. Random freezing - "Spring frost"
+	Description: apparently randomly, Ecologia will freeze up with excessive
+			CPU usage. Occurs approx. once every 5-10 runs at various updates.
+	Reproducing: not known
+	Error source: Most likely related to animal behaviour. Possible:
+			fleeing animal cannot move in any direction.
+	STATUS: FIXED
+
+2. Flee CENTER 
+	Description: occasionally, a herbivore will	attempt to move in the 
+			direction CENTER when fleeing from a herbivore
+	Reproducing: not known
+	Error source: A carnivore ends up on the same tile as the herbivore in
+			question (how is that possible?)
+			- Answer: the carnivore is actually hunting another herbivore
+				and only happens to end up on the tile of this herbivore.
+				(The problem lies in the Animal class search algorithm.)
+	STATUS: FIXED
+
+2b. Move CENTER
+	Description: sometimes, herbivores try to move in the direction CENTER
+			even when not fleeing from a carnivore
+	Reproducing: happens almost every run
+	Error source: a missing check in the grazing method
+	STATUS: FIXED
+
+3. JAR file does not write log
+	Description: when the exported Ecologia JAR file is started graphically
+			by double-clicking it, it will not write any log files even if told
+			to do so via the 'Program Configuration' window. There is no problem
+			when launching from terminal.
+	Reproducing: as described above
+	Error source: This isn't a real bug at all - the only problem is that Java
+			takes the user's home directory as working directory when launching
+			the JAR file graphically. That means the log file ends up there.
+	STATUS: DROPPED
+
+4. Tiles in row 0 or column 0 not accessible?
+	Description: if you click on a tile in row 0 or column 0, InfoBox will not
+			pop up.
+	Reproducing: as described above
+	Error source: an off-by-one error in Display/InfoBox
+	STATUS: FIXED
+
+5. InfoBox confused?
+	Description: InfoBox showed that a tile is occupied by a carnivore in the
+			tile view, but showed the stats for a herbivore in the animal view.
+			The field above does not have any occupant, but the animal view
+			showed a carnivore present. (See lost+found/flee_center/log3 line
+			1316) Simulation stopped, but without an error message.
+	Reproducing: not known
+	Error source: caused by the flee CENTER bug
+	STATUS: REDUNDANT
+
+6. JAR file can't read help file
+	Description: when launched from a packaged JAR file, Ecologia can never
+			display its help text. No problem when launching from Eclipse.
+	Reproducing: as above
+	Error source: something to do with where the help text is stored
+	STATUS: FIXED
+	
+7. Carnivore attacks dead herbivore
+	Description: At irregular intervals, Ecologia stops the simulation
+			(without changing the "Stop/Start" button). The log shows that
+			a carnivore has just killed a herbivore, but then immediately
+			proceeds to attack a (the same?) herbivore again.
+	Reproducing: not known
+	Error source: Probably either in the dead-herbivore-removal-code or in the
+			carnivore-attack-code. Why Ecologia stops is still unclear.
+	STATUS: FIXED
+
+8. "Ghost bug" - Dead animals not removed from the display
+	Description: Occasionally, a dead animal will not be removed from
+			Simulator.map, leaving a "ghost" on the display. Sometimes
+			Carnivores attempt to attack phantom Herbivores, leading to
+			error messages.
+	Reproducing: during a longer run, look for carnivores that aren't moving.
+	Error source: Caused by an animal "dying twice" in one turn, e.g. during
+			movement, or when death by old age and starvation coincide.
+	STATUS: FIXED
+
+9. "Wall of death" - carnivores repeatedly drive herbivores extinct
+	Description: Carnivores drift towards the right world border early on
+			during a run. There they reproduce, eventually forming a line
+			across the entire width of the world. This wall then moves
+			left, killing all herbivores in its path.
+	Reproducing: Noticeable on virtually every run in which carnivores
+			don't die out straight away.
+	Error source: The search algorithm in the Animal class is too predictable.
+			Unfortunately, the algorithm that would fix this bug is a major
+			cause of the flee center bug...
+	STATUS: FIXED

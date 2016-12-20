@@ -1,0 +1,38 @@
+ECOLOGIA Roadmap
+================
+
+
+Ecologia 1.0 (Base):
+
+The basic Ecologia set-up, with herbivores, carnivores and water tiles. Simple
+and stable, the basis for future scenario branches.
+
+
+Scenario branches:
+
+Branches introducing new concepts to Ecologia Base, e.g. seasons, disease,
+sexual reproduction, new species...
+
+
+Ecologia X:
+
+The grand amalgamation of all scenarios. A complex ecosystem simulation 
+including many different factors.
+
+
+									Ecologia X >>
+							/======================================== ...
+						   //							//		//
+						  //	  Scenario branches    //	   //
+						 //			 v		|		  //	  //
+						/===================+=========/		 //
+ 			  [now]    //					v				//
+Ecologia	Ecologia  /=====================================/
+  0.9		   1.0	 //
+   v			v	//				Ecologia Base Branch >>
+===================================================================== ...
+
+24/12/2014
+updated 18/05/2016
+
+Daniel Vedder
