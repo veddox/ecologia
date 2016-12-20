@@ -46,8 +46,8 @@ public class SimulationConfig extends JFrame
 		heading = new JLabel("Initial Parameter Settings");
 		//Dimension settings
 		dimensions = new JLabel("World dimensions (x*y): ");
-		width = new JTextField(String.valueOf(World.getInstance().getSize()[0]), 4);
-		height = new JTextField(String.valueOf(World.getInstance().getSize()[1]), 4);
+		width = new JTextField(String.valueOf(World.getInstance().getParam("xsize")), 4);
+		height = new JTextField(String.valueOf(World.getInstance().getParam("ysize")), 4);
 		Box dimBox = new Box(BoxLayout.X_AXIS);
 		dimBox.add(dimensions);
 		dimBox.add(Box.createHorizontalStrut(15));
@@ -57,38 +57,38 @@ public class SimulationConfig extends JFrame
 		//Initial numbers of animals and water tiles
 		Box waterBox = new Box(BoxLayout.X_AXIS);
 		waterLabel = new JLabel("Number of water tiles: ");
-		no_water_tiles = new JTextField(String.valueOf(World.getInstance().getWaterTiles()), 3);
+		no_water_tiles = new JTextField(String.valueOf(World.getInstance().getParam("waterTiles")), 3);
 		waterBox.add(waterLabel);
 		waterBox.add(Box.createHorizontalStrut(30));
 		waterBox.add(no_water_tiles);
 		Box grassBox = new Box(BoxLayout.X_AXIS);
 		grassLabel = new JLabel("Starting grass density: ");
-		grassDensity = new JTextField(String.valueOf(World.getInstance().getStartGrassDensity()), 4);
+		grassDensity = new JTextField(String.valueOf(World.getInstance().getParam("startGrassDensity")), 4);
 		grassBox.add(grassLabel);
 		grassBox.add(Box.createHorizontalStrut(25));
 		grassBox.add(grassDensity);
 		Box nCarnBox = new Box(BoxLayout.X_AXIS);
 		nCarnLabel = new JLabel("Number of carnivores: ");
-		no_carnivores = new JTextField(String.valueOf(World.getInstance().getStartNoCarnivores()), 3);
+		no_carnivores = new JTextField(String.valueOf(World.getInstance().getParam("startNoCarnivores")), 3);
 		nCarnBox.add(nCarnLabel);
 		nCarnBox.add(Box.createHorizontalStrut(25));
 		nCarnBox.add(no_carnivores);
 		Box nHerbBox = new Box(BoxLayout.X_AXIS);
 		nHerbLabel = new JLabel("Number of herbivores: ");
-		no_herbivores = new JTextField(String.valueOf(World.getInstance().getStartNoHerbivores()), 3);
+		no_herbivores = new JTextField(String.valueOf(World.getInstance().getParam("startNoHerbivores")), 3);
 		nHerbBox.add(nHerbLabel);
 		nHerbBox.add(Box.createHorizontalStrut(25));
 		nHerbBox.add(no_herbivores);
 		//Initial energy for the animals
 		Box energyCarnBox = new Box(BoxLayout.X_AXIS);
 		energyCarnLabel = new JLabel("Start energy carnivores: ");
-		energyCarnivores = new JTextField(String.valueOf(World.getInstance().getStartEnergyCarnivores()), 4);
+		energyCarnivores = new JTextField(String.valueOf(World.getInstance().getParam("startEnergyCarnivores")), 4);
 		energyCarnBox.add(energyCarnLabel);
 		energyCarnBox.add(Box.createHorizontalStrut(25));
 		energyCarnBox.add(energyCarnivores);
 		Box energyHerbBox = new Box(BoxLayout.X_AXIS);
 		energyHerbLabel = new JLabel("Start energy herbivores: ");
-		energyHerbivores = new JTextField(String.valueOf(World.getInstance().getStartEnergyHerbivores()), 4);
+		energyHerbivores = new JTextField(String.valueOf(World.getInstance().getParam("startEnergyHerbivores")), 4);
 		energyHerbBox.add(energyHerbLabel);
 		energyHerbBox.add(Box.createHorizontalStrut(25));
 		energyHerbBox.add(energyHerbivores);
@@ -98,12 +98,14 @@ public class SimulationConfig extends JFrame
         {
           public void actionPerformed(ActionEvent e)
           {
-              EcologiaIO.log("SimulationConfig: World parameter settings updated.");
         	  if (showRestartDialog) {
         		  int restart = JOptionPane.showConfirmDialog(null, 
         				  "Please note: The new settings will only take \neffect on the next run.\nRestart now?", "Restart?", 
         						  JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-        		  if (restart != JOptionPane.CANCEL_OPTION) updateWorld();
+        		  if (restart != JOptionPane.CANCEL_OPTION) {
+					  updateWorld();
+					  EcologiaIO.log("SimulationConfig: World parameter settings updated.");
+				  }
         		  if (restart == JOptionPane.YES_OPTION) Ecologia.getInstance().reset();
         	  }
         	  setVisible(false);
@@ -153,14 +155,14 @@ public class SimulationConfig extends JFrame
 	 */
 	public void refresh()
 	{
-		width.setText(String.valueOf(World.getInstance().getSize()[0]));
-		height.setText(String.valueOf(World.getInstance().getSize()[1]));
-		grassDensity.setText(String.valueOf(World.getInstance().getStartGrassDensity()));
-		no_water_tiles.setText(String.valueOf(World.getInstance().getWaterTiles()));
-		no_carnivores.setText(String.valueOf(World.getInstance().getStartNoCarnivores()));
-		no_herbivores.setText(String.valueOf(World.getInstance().getStartNoHerbivores()));
-		energyCarnivores.setText(String.valueOf(World.getInstance().getStartEnergyCarnivores()));
-		energyHerbivores.setText(String.valueOf(World.getInstance().getStartEnergyHerbivores()));
+		width.setText(String.valueOf(World.getInstance().getParam("xsize")));
+		height.setText(String.valueOf(World.getInstance().getParam("ysize")));
+		grassDensity.setText(String.valueOf(World.getInstance().getParam("startGrassDensity")));
+		no_water_tiles.setText(String.valueOf(World.getInstance().getParam("waterTiles")));
+		no_carnivores.setText(String.valueOf(World.getInstance().getParam("startNoCarnivores")));
+		no_herbivores.setText(String.valueOf(World.getInstance().getParam("startNoHerbivores")));
+		energyCarnivores.setText(String.valueOf(World.getInstance().getParam("startEnergyCarnivores")));
+		energyHerbivores.setText(String.valueOf(World.getInstance().getParam("startEnergyHerbivores")));
 	}
 	
 	/**
@@ -168,12 +170,13 @@ public class SimulationConfig extends JFrame
 	 */
 	public void updateWorld()
 	{
-		World.getInstance().setSize(new int[] {new Integer(width.getText()), new Integer(height.getText())});
-		World.getInstance().setStartGrassDensity(new Integer(grassDensity.getText()));
-		World.getInstance().setStartNoWaterTiles(new Integer(no_water_tiles.getText()));
-		World.getInstance().setStartNoHerbivores(new Integer(no_herbivores.getText()));
-		World.getInstance().setStartNoCarnivores(new Integer(no_carnivores.getText()));
-		World.getInstance().setStartEnergyCarnivores(new Integer(energyCarnivores.getText()));
-		World.getInstance().setStartEnergyHerbivores(new Integer(energyHerbivores.getText()));
+		World.getInstance().setParam("xsize", new Integer(width.getText()));
+		World.getInstance().setParam("ysize", new Integer(height.getText()));
+		World.getInstance().setParam("startGrassDensity", new Integer(grassDensity.getText()));
+		World.getInstance().setParam("waterTiles", new Integer(no_water_tiles.getText()));
+		World.getInstance().setParam("startNoHerbivores", new Integer(no_herbivores.getText()));
+		World.getInstance().setParam("startNoCarnivores", new Integer(no_carnivores.getText()));
+		World.getInstance().setParam("startEnergyCarnivores", new Integer(energyCarnivores.getText()));
+		World.getInstance().setParam("startEnergyHerbivores", new Integer(energyHerbivores.getText()));
 	}
 }

@@ -1,0 +1,13 @@
+#!/bin/bash
+# Run Ecologia during development
+# Automatically analyses the log file
+
+rm -r releases/ecologia-2.0
+./release.py --no-javadoc --no-sign
+cd releases/ecologia-2.0
+java -jar ecologia-2.0.jar --logging --verbose --config ../../ecologia.config
+cp ecologia.log ../../analysis
+cd ../../analysis/demography
+./population.py --table --logfile ../ecologia.log
+R --slave -f population.r
+mv populations-*.jpg ../../data

@@ -104,8 +104,8 @@ public class Display extends JPanel implements Scrollable, MouseListener
 	public void mouseClicked(MouseEvent click) {
 		int fieldX = click.getX()/20;
 		int fieldY = click.getY()/20;
-		if (fieldX >= 0 && fieldX < World.getInstance().getSize()[0] && fieldY >= 0
-			&& fieldY < World.getInstance().getSize()[1]) {
+		if (fieldX >= 0 && fieldX < World.getInstance().getParam("xsize") && fieldY >= 0
+			&& fieldY < World.getInstance().getParam("ysize")) {
 			infobox.show(click.getX()/20, click.getY()/20);
 		}
 	}

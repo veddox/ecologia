@@ -25,7 +25,8 @@ public class World
 	private static World world; //The Singleton instance of this class
 	
 	//Parameter variables
-	private int[] size; //The size of the world (x*y)
+	//TODO Reduce these to a single hashmap
+	/*private int[] size; //The size of the world (x*y)
 	private int timelapse; //When running, the simulation will be updated every so many milliseconds.
 	private int stopAt; //The simulation will stop once this update is reached.
 	private int autorun; //The number of updates the simulation will run for automatically before quitting
@@ -34,6 +35,9 @@ public class World
 	private int waterTiles; //The number of water tiles that will be created.
 	private int startNoCarnivores, startNoHerbivores; //The starting number of carnivores/herbivores.
 	private int startEnergyCarnivores, startEnergyHerbivores; //The starting energy for carnivores/herbivores.
+	*/
+
+	private HashMap<String, Integer> parameters;
 
 	//Runtime variables
 	private boolean running; //Is the simulation running?
@@ -51,7 +55,7 @@ public class World
 	private World()
 	{
 		//Parameter settings
-		size = new int[] {100, 100}; //Default: 100*100
+		/*size = new int[] {100, 100}; //Default: 100*100
 		timelapse = 100; //Default: 300 - can be changed at run-time
 		stopAt = 200; //Default: 100 - can be changed at run-time
 		autorun = -1; //Default: -1 (off)
@@ -61,7 +65,21 @@ public class World
 		startNoCarnivores = 50; //Default: 50 - Hypothetical ideal: 5 (?)
 		startNoHerbivores = 200; //Default: 200 - Hypothetical ideal: 160 (?)
 		startEnergyCarnivores = 150; //Default: 150
-		startEnergyHerbivores = 100; //Default: 100
+		startEnergyHerbivores = 100; //Default: 100 */
+		parameters = new HashMap<String, Integer>();
+
+		parameters.put("xsize", 100);
+		parameters.put("ysize", 100);
+		parameters.put("timelapse", 100);
+		parameters.put("stopAt", 200);
+		parameters.put("autorun", -1);
+		parameters.put("waterTiles", 10);
+		parameters.put("humidity", 1);
+		parameters.put("startGrassDensity", 100);
+		parameters.put("startNoCarnivores", 50);
+		parameters.put("startNoHerbivores", 200);
+		parameters.put("startEnergyCarnivores", 150);
+		parameters.put("startEnergyHerbivores", 100);
 		
 		reset(); //Runtime variables
 	}
@@ -114,7 +132,7 @@ public class World
 				if (line.startsWith("[") && line.endsWith("]")) section = line;
 				//Deal with world variables
 				else if (section.equals("[world]")) {
-					switch (var) {
+					/*switch (var) {
 						case "width": size[0] = value; break;
 						case "height": size[1] = value; break;
 						case "timelapse": timelapse = value; break;
@@ -128,7 +146,8 @@ public class World
 						case "startEnergyHerbivores": startEnergyHerbivores = value; break;
 						case "startEnergyCarnivores": startEnergyCarnivores = value; break;
 						default: EcologiaIO.error("Invalid config variable in the [world] section: "+var);
-					}
+						}*/
+					setParam(var, value);
 				}
 				//Configure default animal genomes
 				else if (section.equals("[herbivore]")) {
@@ -164,7 +183,7 @@ public class World
 		herbivoreCounter = 0;
 		carnivoreCounter = 0;
 		highestGeneration = 1;
-		averageGrassDensity = startGrassDensity;
+		averageGrassDensity = parameters.get("startGrassDensity");
 		animals = null;
 		news = new ArrayList<String>();
 	}
@@ -244,6 +263,33 @@ public class World
 		if (type == OccupantType.HERBIVORE) Herbivore.defaultGenome = genome;
 		else if (type == OccupantType.CARNIVORE) Carnivore.defaultGenome = genome;
 	}
+
+	/**
+	 * Return a parameter value.
+	 */
+	public int getParam(String param)
+	{
+		if (parameters.containsKey(param))
+			return parameters.get(param);
+		else {
+			EcologiaIO.error("getParam: invalid parameter "+param, EcologiaIO.FATAL_ERROR);
+			return -1; //Will never be reached, but is syntactically needed
+		}
+	}
+
+	/**
+	 * Set a parameter value.
+	 */
+	public void setParam(String param, int value)
+	{
+		//XXX Is this check necessary here?
+		if (parameters.containsKey(param))
+			parameters.put(param, value);
+		else EcologiaIO.error("setParam: invalid parameter "+param, EcologiaIO.FATAL_ERROR);
+	}
+	
+	
+/*
 	
 	public int[] getSize() 
 	{
@@ -357,6 +403,8 @@ public class World
 	{
 		this.startEnergyHerbivores = startEnergyHerbivores;
 	}
+
+*/
 
 	public int getHerbivoreCount() 
 	{

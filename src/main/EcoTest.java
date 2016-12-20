@@ -9,6 +9,8 @@ import model.*;
  * (below) is set to true.
  * 
  * TODO: expand this into a proper testing framework?
+ *
+ * THIS IS OUTDATED - DO NOT USE WITHOUT MAJOR MODIFICATIONS
  * 
  * @author Daniel Vedder
  * @date 24.12.2014
@@ -45,13 +47,13 @@ public class EcoTest
 		if (turn == 1) {
 			EcologiaIO.debug("Ecotest: Creating a herbivore at (1, 0)");
 			Herbivore herbivore = new Herbivore(World.getInstance().getNextID(), 
-					Herbivore.defaultGenome, -1, 1, 0, 
-					World.getInstance().getStartEnergyHerbivores(), 0);
+												Herbivore.defaultGenome, -1, 1, 0, 
+												World.getInstance().getParam("startEnergyHerbivores"), 0);
 			Simulator.addAnimal(herbivore);
 			EcologiaIO.debug("Ecotest: Creating a carnivore at (1, 3)");
 			Carnivore carnivore = new Carnivore(World.getInstance().getNextID(), 
-					Carnivore.defaultGenome, -1, 1, 3, 
-					World.getInstance().getStartEnergyCarnivores(), 0);
+												Carnivore.defaultGenome, -1, 1, 3, 
+												World.getInstance().getParam("startEnergyCarnivores"), 0);
 			Simulator.addAnimal(carnivore);
 		}
 		if (turn == 2) {
@@ -98,8 +100,8 @@ public class EcoTest
 			tpcY = 0;
 			EcologiaIO.debug("Creating a carnivore at (0, 0)");
 			Carnivore carnivore = new Carnivore(World.getInstance().getNextID(), 
-					Carnivore.defaultGenome, -1, tpcX, tpcY, 
-					World.getInstance().getStartEnergyCarnivores(), 0);
+												Carnivore.defaultGenome, -1, tpcX, tpcY, 
+												World.getInstance().getParam("startEnergyCarnivores"), 0);
 			Simulator.addAnimal(carnivore);
 		}
 		else if (turn < 5 && turn > 1) {

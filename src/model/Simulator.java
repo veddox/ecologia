@@ -45,12 +45,12 @@ public class Simulator
 		//Calculate the new grass density on each plot
 		EcologiaIO.debug("Simulator: Recalculating grass density.");
 		double averageDensity = 0;
-		int xsize = World.getInstance().getSize()[0];
-		int ysize = World.getInstance().getSize()[1];
+		int xsize = World.getInstance().getParam("xsize");
+		int ysize = World.getInstance().getParam("ysize");
 		for (int x = 0; x < xsize; x++) {
 			for (int y = 0; y < ysize; y++) {
 				if (!map[x][y].nearWater()) {
-					map[x][y].setLocalHumidity(World.getInstance().getHumidity());
+					map[x][y].setLocalHumidity(Humidity.getStatus(World.getInstance().getParam("humidity")));
 				}
 				map[x][y].calculateGrassDensity();
 				averageDensity += map[x][y].getGrassDensity();
@@ -105,14 +105,14 @@ public class Simulator
 	private void initMap()
 	{
 		EcologiaIO.debug("Simulator: initialising map.");
-		int xsize = World.getInstance().getSize()[0];
-		int ysize = World.getInstance().getSize()[1];
+		int xsize = World.getInstance().getParam("xsize");
+		int ysize = World.getInstance().getParam("ysize");
 		map = new MapField[xsize][ysize];
 		for (int x = 0; x < xsize; x++) {
 			for (int y = 0; y < ysize; y++) {
 				map[x][y] = new MapField(x, y, OccupantType.NONE,
-										 World.getInstance().getHumidity(),
-										 World.getInstance().getStartGrassDensity());
+										 Humidity.getStatus(World.getInstance().getParam("humidity")),
+										 World.getInstance().getParam("startGrassDensity"));
 			}
 		}
 	}
@@ -123,13 +123,13 @@ public class Simulator
 	private void initWaterTiles()
 	{
 		EcologiaIO.debug("Simulator: initialising water tiles.");
-		for (int i = 0; i < World.getInstance().getWaterTiles(); i++) {
+		for (int i = 0; i < World.getInstance().getParam("waterTiles"); i++) {
 			//Each water tile is placed in a random location
-			int setX = random.nextInt(World.getInstance().getSize()[0]);
-			int setY = random.nextInt(World.getInstance().getSize()[1]);
+			int setX = random.nextInt(World.getInstance().getParam("xsize"));
+			int setY = random.nextInt(World.getInstance().getParam("ysize"));
 			while (map[setX][setY].getOccupant() != OccupantType.NONE) {
-				setX = random.nextInt(World.getInstance().getSize()[0]);
-				setY = random.nextInt(World.getInstance().getSize()[1]);
+				setX = random.nextInt(World.getInstance().getParam("xsize"));
+				setY = random.nextInt(World.getInstance().getParam("ysize"));
 			}
 			map[setX][setY].setOccupant(OccupantType.WATER);
 			//The fields around each water tile are watered
@@ -154,28 +154,28 @@ public class Simulator
 		herbivorePopulation = new ArrayList<Herbivore>();
 		//Create the initial carnivore population, setting each carnivore down at a random position
 		EcologiaIO.debug("Simulator: initialising carnivores.");
-		for (int j = 0; j < World.getInstance().getStartNoCarnivores(); j++) {
-			int setXCarnivore = random.nextInt(World.getInstance().getSize()[0]);
-			int setYCarnivore = random.nextInt(World.getInstance().getSize()[1]);
+		for (int j = 0; j < World.getInstance().getParam("startNoCarnivores"); j++) {
+			int setXCarnivore = random.nextInt(World.getInstance().getParam("xsize"));
+			int setYCarnivore = random.nextInt(World.getInstance().getParam("ysize"));
 			while (map[setXCarnivore][setYCarnivore].getOccupant() != OccupantType.NONE) {
-				setXCarnivore = random.nextInt(World.getInstance().getSize()[0]);
-				setYCarnivore = random.nextInt(World.getInstance().getSize()[1]);
+				setXCarnivore = random.nextInt(World.getInstance().getParam("xsize"));
+				setYCarnivore = random.nextInt(World.getInstance().getParam("ysize"));
 			}
-			int startEnergyCarnivores = World.getInstance().getStartEnergyCarnivores();
+			int startEnergyCarnivores = World.getInstance().getParam("startEnergyCarnivores");
 			carnivorePopulation.add(new Carnivore(World.getInstance().getNextID(), 
 					Carnivore.defaultGenome, 1, setXCarnivore, setYCarnivore, 
 					startEnergyCarnivores, 0));
 		}
 		//Create the initial herbivore population, setting each herbivore down at a random position
 		EcologiaIO.debug("Simulator: initialising herbivores.");
-		for (int i = 0; i < World.getInstance().getStartNoHerbivores(); i++) {
-			int setXHerbivore = random.nextInt(World.getInstance().getSize()[0]);
-			int setYHerbivore = random.nextInt(World.getInstance().getSize()[1]);
+		for (int i = 0; i < World.getInstance().getParam("startNoHerbivores"); i++) {
+			int setXHerbivore = random.nextInt(World.getInstance().getParam("xsize"));
+			int setYHerbivore = random.nextInt(World.getInstance().getParam("ysize"));
 			while (map[setXHerbivore][setYHerbivore].getOccupant() != OccupantType.NONE) {
-				setXHerbivore = random.nextInt(World.getInstance().getSize()[0]);
-				setYHerbivore = random.nextInt(World.getInstance().getSize()[1]);
+				setXHerbivore = random.nextInt(World.getInstance().getParam("xsize"));
+				setYHerbivore = random.nextInt(World.getInstance().getParam("ysize"));
 			}
-			int startEnergyHerbivores = World.getInstance().getStartEnergyHerbivores();
+			int startEnergyHerbivores = World.getInstance().getParam("startEnergyHerbivores");
 			herbivorePopulation.add(new Herbivore(World.getInstance().getNextID(), 
 					Herbivore.defaultGenome, 1, setXHerbivore, setYHerbivore, 
 					startEnergyHerbivores, 0));

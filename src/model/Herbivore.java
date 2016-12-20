@@ -82,7 +82,7 @@ public class Herbivore extends Animal
 		for (int xdist = x-genome.getSight(); xdist < x+genome.getSight(); xdist++) {
 			for (int ydist = y-genome.getSight(); ydist < y+genome.getSight(); ydist++) {
 				if (!(xdist == x && ydist == y) && xdist >= 0 && ydist >= 0 && 
-						xdist < World.getInstance().getSize()[0] && ydist < World.getInstance().getSize()[1] &&
+					xdist < World.getInstance().getParam("xsize") && ydist < World.getInstance().getParam("ysize") &&
 						Simulator.getField(xdist, ydist).getGrassDensity() > currentGrassDensity) {
 					Direction d = super.getDirection(xdist, ydist);
 					if (!possibleDirs.contains(d)) possibleDirs.add(d);

@@ -45,7 +45,7 @@ public class GUI extends JFrame
 	public GUI()
 	{
 		EcologiaIO.debug("Creating GUI");
-		this.setTitle("Ecologia");
+		this.setTitle("Ecologia "+Ecologia.version);
 		this.setSize(1000, 560);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		createMenu();
@@ -75,16 +75,16 @@ public class GUI extends JFrame
 		else run.setText("Start");
 		//Update the humidity from the combo box
 		Humidity setHumidity = Humidity.fromString((String) humidityChooser.getSelectedItem());
-		if (setHumidity != World.getInstance().getHumidity()) {
-			World.getInstance().setHumidity(setHumidity);
+		if (setHumidity.getValue() != World.getInstance().getParam("humidity")) {
+			World.getInstance().setParam("humidity", setHumidity.getValue());
 			EcologiaIO.log("Humidity set to "+setHumidity.getString());
 		}
 		//Update the simulation speed from the speed slider
 		int setSpeed = speedSlider.getMaximum() - speedSlider.getValue();
-		World.getInstance().setTimelapse(setSpeed);
+		World.getInstance().setParam("timelapse", setSpeed);
 		//Update the stopAt variable from user input
 		try {
-			World.getInstance().setStopAt(Integer.parseInt((stopAtField.getText())));
+			World.getInstance().setParam("stopAt", Integer.parseInt((stopAtField.getText())));
 		}
 		catch (NumberFormatException nfe) {}
 		//Update the various counters
@@ -93,7 +93,7 @@ public class GUI extends JFrame
 		carnivore_counter.setText("Carnivores: "+ World.getInstance().getCarnivoreCount());
 		generation_counter.setText("Generations: "+World.getInstance().getGeneration());
 		grass_counter.setText("Grass density: "+World.getInstance().getAverageGrassDensity());
-		humidityChooser.setSelectedItem(World.getInstance().getHumidity().getString());
+		humidityChooser.setSelectedItem(Humidity.getStatus(World.getInstance().getParam("humidity")).getString());
 	}
 	
 	/**
@@ -251,7 +251,7 @@ public class GUI extends JFrame
 				{Humidity.SATURATION.getString(), Humidity.WET.getString(), Humidity.DRY.getString(), 
 				Humidity.DROUGHT.getString(), Humidity.SEVERE_DROUGHT.getString()});
 		humidityChooser.setMaximumSize(new Dimension(140, 30));
-		humidityChooser.setSelectedItem(World.getInstance().getHumidity().getString());
+		humidityChooser.setSelectedItem(Humidity.getStatus(World.getInstance().getParam("humidity")).getString());
 		hum_panel.add(humidity);
 		hum_panel.add(humidityChooser);
 		information.add(hum_panel);
@@ -292,7 +292,7 @@ public class GUI extends JFrame
 		//Add the simulation speed slider
 		information.add(new JLabel("Simulation speed:"));
 		information.add(Box.createVerticalStrut(3));
-		speedSlider = new JSlider(0, 1500, 1500-World.getInstance().getTimelapse());
+		speedSlider = new JSlider(0, 1500, 1500-World.getInstance().getParam("timelapse"));
 		speedSlider.setMajorTickSpacing(300);
 		speedSlider.setMinorTickSpacing(50);
 		speedSlider.setPaintTicks(true);
@@ -304,7 +304,7 @@ public class GUI extends JFrame
 		JLabel stopLabel = new JLabel("Pause at update:");
 		stopAtField = new JTextField(5);
 		stopAtField.setMaximumSize(stopAtField.getPreferredSize());
-		stopAtField.setText(Integer.toString(World.getInstance().getStopAt()));
+		stopAtField.setText(Integer.toString(World.getInstance().getParam("stopAt")));
 		stopPanel.add(Box.createVerticalStrut(3));
 		stopPanel.add(stopLabel);
 		stopPanel.add(Box.createVerticalStrut(1));
@@ -324,7 +324,8 @@ public class GUI extends JFrame
 	 */
 	private void addDisplay()
 	{
-		display = new Display(World.getInstance().getSize());
+		display = new Display(new int[] {World.getInstance().getParam("xsize"),
+							   World.getInstance().getParam("ysize")});
 		scrollscreen = new JScrollPane(display, JScrollPane. VERTICAL_SCROLLBAR_ALWAYS,
 									   JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		this.add(scrollscreen, BorderLayout.CENTER);

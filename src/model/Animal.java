@@ -23,6 +23,7 @@ public abstract class Animal
 	 * (max value: 2**31) should last for >40,000,000 updates
 	 * (based on a 1000 update test run).
 	 * => long IDs are not very urgent...
+	 * --> CHECK THIS AGAIN
 	 */
 	protected int IDnumber; //A unique identifier for this animal
 	protected int parent; //The ID number of the parent
@@ -205,8 +206,8 @@ public abstract class Animal
 		ArrayList<int[]> targets = new ArrayList<int[]>();
 		for (int xdist = x-genome.getSight(); xdist < x+genome.getSight(); xdist++) {
 			for (int ydist = y-genome.getSight(); ydist < y+genome.getSight(); ydist++) {
-				if (xdist >= 0 && ydist >= 0 && xdist < World.getInstance().getSize()[0]
-					&& ydist < World.getInstance().getSize()[1]) {
+				if (xdist >= 0 && ydist >= 0 && xdist < World.getInstance().getParam("xsize")
+					&& ydist < World.getInstance().getParam("ysize")) {
 					if (Simulator.getField(xdist, ydist).getOccupant() == type) {
 						int[] newTarget = {xdist, ydist};
 						targets.add(newTarget);
@@ -228,8 +229,8 @@ public abstract class Animal
 		int minDist = genome.getSight()+1;
 		for (int xdist = x-genome.getSight(); xdist < x+genome.getSight(); xdist++) {
 			for (int ydist = y-genome.getSight(); ydist < y+genome.getSight(); ydist++) {
-				if (xdist >= 0 && ydist >= 0 && xdist < World.getInstance().getSize()[0]
-					&& ydist < World.getInstance().getSize()[1]) {
+				if (xdist >= 0 && ydist >= 0 && xdist < World.getInstance().getParam("xsize")
+					&& ydist < World.getInstance().getParam("ysize")) {
 					if (Simulator.getField(xdist, ydist).getOccupant() == type) {
 						int distance = getDistance(xdist, ydist);
 						if (distance != 0 && distance < minDist) {
@@ -255,8 +256,8 @@ public abstract class Animal
 		int minDist = genome.getSight()+1;
 		for (int xdist = x-genome.getSight(); xdist < x+genome.getSight(); xdist++) {
 			for (int ydist = y-genome.getSight(); ydist < y+genome.getSight(); ydist++) {
-				if (xdist >= 0 && ydist >= 0 && xdist < World.getInstance().getSize()[0]
-					&& ydist < World.getInstance().getSize()[1]) {
+				if (xdist >= 0 && ydist >= 0 && xdist < World.getInstance().getParam("xsize")
+					&& ydist < World.getInstance().getParam("ysize")) {
 					if (Simulator.getField(xdist, ydist).getOccupant() == type) {
 						int distance = getDistance(xdist, ydist);
 						int[] newTarget = {xdist, ydist};
@@ -292,8 +293,8 @@ public abstract class Animal
 			case TOP_LEFT: nextY--; nextX--; break;
 			default: EcologiaIO.error("Invalid direction passed to Animal.getNeighbouringField()! ("+dir+") by "+type.toString()+" @"+x+"/"+y); 
 		}
-		if (nextX < 0 || nextX >= World.getInstance().getSize()[0] || 
-				nextY < 0 || nextY >= World.getInstance().getSize()[1]) {
+		if (nextX < 0 || nextX >= World.getInstance().getParam("xsize") || 
+			nextY < 0 || nextY >= World.getInstance().getParam("ysize")) {
 			return null;
 		}
 		else {

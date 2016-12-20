@@ -23,8 +23,9 @@ def find_version():
     main_file = open("src/main/Ecologia.java")
     main_source = main_file.read()
     main_file.close()
+    #This string surgery is a little iffy, but it works
     version_start = main_source.find("version = ")+11
-    version_end = main_source.find('"', version_start)
+    version_end = main_source.find(' ', version_start)
     return main_source[version_start:version_end]
 
 '''

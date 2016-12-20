@@ -5,8 +5,9 @@ import view.GUI;
 import model.Simulator;
 
 /**
- * Ecologia is a relatively simple ecosystem simulator, designed to show basic
- * relationships between predators, prey and producers.
+ * This is an individual-based model of the ecology of the saiga antelope
+ * (Saiga tatarica tatarica). The source code was forked from the Ecologia
+ * ecosystem simulator, version 1.1 (www.launchpad.net/ecologia).
  *
  *  Copyright (C) 2014-2016 Daniel Vedder
  *
@@ -28,18 +29,18 @@ import model.Simulator;
  * manager, updating the program each round.
  *
  * @author Daniel Vedder
- * @version 28.8.2014
+ * @version 20.12.2016
  */
 public class Ecologia implements Runnable 
 {
 	public static Ecologia eco; //The singleton object
-	public static final String version = "1.1";
+	public static final String version = "2.0 Saiga";
 
 	private static boolean noGUI = false;
 	
 	private GUI gui;
 	private Simulator simulator;
-	private EcoTest tester;
+	//private EcoTest tester; //XXX Currently not used
 	
 	private Thread runningThread;
 	
@@ -73,7 +74,7 @@ public class Ecologia implements Runnable
 			else if (a.equals("--no-graphics"))
 				noGUI = true;
 			else if (a.equals("--autorun")) {
-				World.getInstance().setAutorun(new Integer(args[i+1]));
+				World.getInstance().setParam("autorun", new Integer(args[i+1]));
 				i++;
 			}
 			else if (a.equals("--config")) {
@@ -81,7 +82,7 @@ public class Ecologia implements Runnable
 				i++;
 			}
 			else if (a.equals("--timelapse")) {
-				World.getInstance().setTimelapse(new Integer(args[i+1]));
+				World.getInstance().setParam("timelapse", new Integer(args[i+1]));
 				i++;
 			}
 			else EcologiaIO.error("Invalid commandline parameter: "+a);
@@ -93,7 +94,7 @@ public class Ecologia implements Runnable
 		EcologiaIO.printStatus();
 		
 		//Only use no-graphics mode when on autorun
-		if (noGUI && (World.getInstance().getAutorun() < 0)) {
+		if (noGUI && (World.getInstance().getParam("autorun") < 0)) {
 			EcologiaIO.error("Returning to graphics mode as autorun not enabled.");
 			noGUI = false;
 		}
@@ -119,9 +120,9 @@ public class Ecologia implements Runnable
 		EcologiaIO.log("Launching Ecologia...");
 		simulator = new Simulator();
 		if (!noGUI) gui = new GUI();
-		tester = new EcoTest();
+		//tester = new EcoTest();
 		EcologiaIO.debug("Launch completed.");
-		if (World.getInstance().getAutorun() > 0) autorun();
+		if (World.getInstance().getParam("autorun") > 0) autorun();
 	}
 	
 	/**
@@ -129,8 +130,8 @@ public class Ecologia implements Runnable
 	 */
 	private void autorun()
 	{
-		EcologiaIO.log("Performing autorun for "+World.getInstance().getAutorun()+" updates.");
-		World.getInstance().setStopAt(-1);
+		EcologiaIO.log("Performing autorun for "+World.getInstance().getParam("autorun")+" updates.");
+		World.getInstance().setParam("stopAt", -1);
 		startThread();
 	}
 
@@ -138,7 +139,7 @@ public class Ecologia implements Runnable
 	 * Reset the simulator in order to start a new run.
 	 * 
 	 * XXX: Depending on how long the simulation has already
-	 * been running, this can take quite a long time.
+	 * been running, this can take quite a long time. -- Does it?
 	 */
 	public void reset()
 	{
@@ -183,11 +184,11 @@ public class Ecologia implements Runnable
 	 */
 	public synchronized void iterate()
 	{
-		int autorun = World.getInstance().getAutorun();
+		int autorun = World.getInstance().getParam("autorun");
 		World.getInstance().incrementTurn();
 		int turn = World.getInstance().getTurn();
 		EcologiaIO.log("Executing update "+turn);
-		if (EcologiaIO.debugging) tester.runTest();
+		//if (EcologiaIO.debugging) tester.runTest();
 		simulator.update();
 		EcologiaIO.log("Average grass density: "+World.getInstance().getAverageGrassDensity()+"%");	
 		EcologiaIO.log("Herbivore count: "+World.getInstance().getHerbivoreCount());
@@ -195,7 +196,7 @@ public class Ecologia implements Runnable
 		EcologiaIO.log("Generation counter: "+World.getInstance().getGeneration());
 
 		//If the stopAt number is reached, pause the simulation
-		if (World.getInstance().getStopAt() == turn) {
+		if (World.getInstance().getParam("stopAt") == turn) {
 			World.getInstance().setRunning(false);
 		}
 		if (!noGUI) gui.update();
@@ -213,7 +214,7 @@ public class Ecologia implements Runnable
 		}
 		//Pause for as long as the user wants
 		try {
-			Thread.sleep(World.getInstance().getTimelapse());
+			Thread.sleep(World.getInstance().getParam("timelapse"));
 		}
 		catch (InterruptedException ie) {}
 	}
@@ -223,7 +224,7 @@ public class Ecologia implements Runnable
 	 */
 	private static void printHelp()
 	{
-		System.out.println("Ecologia "+version+", the simple ecosystem simulator.");
+		System.out.println("Ecologia "+version+", an individual-based model of saiga ecology.");
 		System.out.println("\nCommandline options:\n");
 		System.out.println("--help    -h	Print this help text");
 		System.out.println("--version -V	Print the version number\n");
