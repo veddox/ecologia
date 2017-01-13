@@ -5,9 +5,10 @@ import view.GUI;
 import model.Simulator;
 
 /**
- * This is an individual-based model of the ecology of the saiga antelope
- * (Saiga tatarica tatarica). The source code was forked from the Ecologia
- * ecosystem simulator, version 1.1 (www.launchpad.net/ecologia).
+ * This is a spatially explicit, individual-based model of the ecology of 
+ * the saiga antelope (Saiga tatarica tatarica). The source code was forked 
+ * from the Ecologia ecosystem simulator, version 1.1 
+ * (www.launchpad.net/ecologia).
  *
  *  Copyright (C) 2014-2016 Daniel Vedder
  *
@@ -214,7 +215,12 @@ public class Ecologia implements Runnable
 		}
 		//Pause for as long as the user wants
 		try {
-			Thread.sleep(World.getInstance().getParam("timelapse"));
+			int sleeptime = World.getInstance().getParam("timelapse");
+			if (sleeptime < 0) {
+				EcologiaIO.error("timelapse < 0");
+				sleeptime = 0;
+			}
+			Thread.sleep(sleeptime);
 		}
 		catch (InterruptedException ie) {}
 	}

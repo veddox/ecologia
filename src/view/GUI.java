@@ -26,7 +26,7 @@ public class GUI extends JFrame
 	private JMenuItem new_run, exit, programConfigBox, simConfigBox, genomeConfigBox, configFileDialog, help, about;
 	private JLabel update_counter, herbivore_counter, carnivore_counter, generation_counter, grass_counter;
 	private JComboBox<String> humidityChooser;
-	private JTextArea ticker; //XXX Remove this at some point?
+	private JTextArea ticker; //XXX Remove this at some point? - Expensive?
 	private JTextField stopAtField;
 	private JCheckBox disableDisplay;
 	private JScrollPane scrollticker, scrollscreen;
@@ -357,7 +357,7 @@ public class GUI extends JFrame
 				ticker.append("\n"+news.get(i));
 			}
 			World.getInstance().giveNews(null); //reset the news list
-			ticker.setCaretPosition(ticker.getText().length()); //XXX Expensive?
+			ticker.setCaretPosition(ticker.getText().length());
 		}
 	}
 	

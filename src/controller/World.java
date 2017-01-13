@@ -24,19 +24,7 @@ public class World
 {
 	private static World world; //The Singleton instance of this class
 	
-	//Parameter variables
-	//TODO Reduce these to a single hashmap
-	/*private int[] size; //The size of the world (x*y)
-	private int timelapse; //When running, the simulation will be updated every so many milliseconds.
-	private int stopAt; //The simulation will stop once this update is reached.
-	private int autorun; //The number of updates the simulation will run for automatically before quitting
-	private Humidity humidity; //The humidity level
-	private int startGrassDensity; //The initial grass density on all fields
-	private int waterTiles; //The number of water tiles that will be created.
-	private int startNoCarnivores, startNoHerbivores; //The starting number of carnivores/herbivores.
-	private int startEnergyCarnivores, startEnergyHerbivores; //The starting energy for carnivores/herbivores.
-	*/
-
+	//Parameter variables are stored in this hashmap
 	private HashMap<String, Integer> parameters;
 
 	//Runtime variables
@@ -54,20 +42,8 @@ public class World
 	 */
 	private World()
 	{
-		//Parameter settings
-		/*size = new int[] {100, 100}; //Default: 100*100
-		timelapse = 100; //Default: 300 - can be changed at run-time
-		stopAt = 200; //Default: 100 - can be changed at run-time
-		autorun = -1; //Default: -1 (off)
-		waterTiles = 10; //Default: 10
-		humidity = Humidity.WET; //Default: Humidity.WET - can be changed at run-time
-		startGrassDensity = 100; //Default: 100
-		startNoCarnivores = 50; //Default: 50 - Hypothetical ideal: 5 (?)
-		startNoHerbivores = 200; //Default: 200 - Hypothetical ideal: 160 (?)
-		startEnergyCarnivores = 150; //Default: 150
-		startEnergyHerbivores = 100; //Default: 100 */
 		parameters = new HashMap<String, Integer>();
-
+		//Parameter settings (defaults, can be changed via the config file)
 		parameters.put("xsize", 100);
 		parameters.put("ysize", 100);
 		parameters.put("timelapse", 100);
@@ -131,24 +107,7 @@ public class World
 				//Set the current section
 				if (line.startsWith("[") && line.endsWith("]")) section = line;
 				//Deal with world variables
-				else if (section.equals("[world]")) {
-					/*switch (var) {
-						case "width": size[0] = value; break;
-						case "height": size[1] = value; break;
-						case "timelapse": timelapse = value; break;
-						case "stopAt": stopAt = value; break;
-						case "autorun": autorun = value; break;
-						case "waterTiles": waterTiles = value; break;
-						case "humidity": humidity = Humidity.getStatus(value); break;
-						case "startGrassDensity": startGrassDensity = value; break;
-						case "startHerbivores": startNoHerbivores = value; break;
-						case "startCarnivores": startNoCarnivores = value; break;
-						case "startEnergyHerbivores": startEnergyHerbivores = value; break;
-						case "startEnergyCarnivores": startEnergyCarnivores = value; break;
-						default: EcologiaIO.error("Invalid config variable in the [world] section: "+var);
-						}*/
-					setParam(var, value);
-				}
+				else if (section.equals("[world]")) setParam(var, value);
 				//Configure default animal genomes
 				else if (section.equals("[herbivore]")) {
 					if (herbGen.containsKey(var)) herbGen.put(var, value);
@@ -285,127 +244,11 @@ public class World
 		//XXX Is this check necessary here?
 		if (parameters.containsKey(param))
 			parameters.put(param, value);
-		else EcologiaIO.error("setParam: invalid parameter "+param, EcologiaIO.FATAL_ERROR);
+		else EcologiaIO.error("setParam: invalid parameter "+param, EcologiaIO.CONTINUABLE_ERROR);
 	}
+
+	// Getters/Setters for runtime variables
 	
-	
-/*
-	
-	public int[] getSize() 
-	{
-		return size;
-	}
-
-	public void setSize(int[] size) 
-	{
-		this.size = size;
-	}
-
-	public int getTimelapse() 
-	{
-		return timelapse;
-	}
-
-	public void setTimelapse(int timelapse) 
-	{
-		if (timelapse < 0) return;
-		if (this.timelapse != timelapse)
-			EcologiaIO.debug("Timelapse changed to "+timelapse+" ms.");
-		this.timelapse = timelapse;
-	}
-
-	public int getStopAt() 
-	{
-		return stopAt;
-	}
-
-	public void setStopAt(int stopAt) 
-	{
-		this.stopAt = stopAt;
-	}
-	
-	public int getAutorun()
-	{
-		return autorun;
-	}
-	
-	public void setAutorun(int autorun)
-	{
-		this.autorun = autorun;
-	}
-	
-	public Humidity getHumidity() 
-	{
-		return humidity;
-	}
-
-	public void setHumidity(Humidity humidity) 
-	{
-		this.humidity = humidity;
-	}
-
-	public int getStartGrassDensity()
-	{
-		return startGrassDensity;
-	}
-
-	public void setStartGrassDensity(int startGrassDensity)
-	{
-		this.startGrassDensity = startGrassDensity;
-	}
-
-	public int getWaterTiles()
-	{
-		return waterTiles;
-	}
-
-	public void setStartNoWaterTiles(int startNoWaterTiles)
-	{
-		this.waterTiles = startNoWaterTiles;
-	}
-
-	public int getStartNoCarnivores()
-	{
-		return startNoCarnivores;
-	}
-
-	public void setStartNoCarnivores(int startNoCarnivores)
-	{
-		this.startNoCarnivores = startNoCarnivores;
-	}
-
-	public int getStartNoHerbivores()
-	{
-		return startNoHerbivores;
-	}
-
-	public void setStartNoHerbivores(int startNoHerbivores)
-	{
-		this.startNoHerbivores = startNoHerbivores;
-	}
-
-	public int getStartEnergyCarnivores() 
-	{
-		return startEnergyCarnivores;
-	}
-
-	public void setStartEnergyCarnivores(int startEnergyCarnivores) 
-	{
-		this.startEnergyCarnivores = startEnergyCarnivores;
-	}
-
-	public int getStartEnergyHerbivores() 
-	{
-		return startEnergyHerbivores;
-	}
-
-	public void setStartEnergyHerbivores(int startEnergyHerbivores) 
-	{
-		this.startEnergyHerbivores = startEnergyHerbivores;
-	}
-
-*/
-
 	public int getHerbivoreCount() 
 	{
 		return herbivoreCounter;
